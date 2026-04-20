@@ -3,30 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "generate:spec-html": "redocly build-docs public/dashboard-openapi.json --output public/dashboardSpec.html --title \"Dashboard API Reference\" --disableGoogleFont --template scripts/redoc-template.hbs",
-    "predev": "npm run generate:spec-html",
-    "dev": "next dev",
-    "prebuild": "npm run generate:spec-html",
-    "build": "next build",
-    "prestart": "npm run generate:spec-html",
-    "start": "next start",
-    "lint": "eslint"
+    "generate:filtered-spec": "mkdir -p generated && node scripts/filter-openapi.mjs",
+    "generate:spec-html": "mkdir -p dist && npm run generate:filtered-spec && redocly build-docs generated/dashboard-openapi.yaml --output dist/index.html --title \"Dashboard API Reference\" --disableGoogleFont --template scripts/redoc-template.hbs && node -e \"require('node:fs').copyFileSync('favicon.ico', 'dist/favicon.ico')\"",
+    "predev": "npm run build",
+    "dev": "serve dist --listen 3000",
+    "build": "npm run generate:spec-html",
+    "prestart": "npm run build",
+    "start": "serve dist --listen 3000",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@redocly/cli": "^2.28.0",
-    "next": "16.2.3",
-    "nextra": "^4.6.1",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "yaml": "^2.8.1"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@eslint/js": "^9.39.4",
     "eslint": "^9",
-    "eslint-config-next": "16.2.3",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "globals": "^16.4.0",
+    "serve": "^14.2.0"
   }
 }

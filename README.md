@@ -1,7 +1,6 @@
 # Dashboard Docs
 
-Static documentation site powered by Next.js, Nextra, and a pre-generated
-Redoc HTML reference.
+Single-page Dashboard API reference site built as static HTML with Redocly.
 
 ## Development
 
@@ -11,21 +10,32 @@ Run the local dev server:
 npm run dev
 ```
 
-Open http://localhost:3000/dashboardSpec to view the site.
+Open http://localhost:3000 to view the site.
 
-## Content structure
+This previews the generated static output from `dist/`.
 
-- `public/dashboard-openapi.json` is the source OpenAPI spec.
-- `public/dashboardSpec.html` is generated automatically for the `/dashboardSpec` route.
+## Build pipeline
+
+- `openapi/kibana-openapi.yaml` is the source OpenAPI spec.
+- `generated/dashboard-openapi.yaml` is the filtered spec generated during build.
+- `dist/index.html` is the generated static site entry point.
 - `scripts/redoc-template.hbs` defines the static reference page shell.
-- `app/[[...mdxPath]]/page.tsx` provides the site's minimal light-only shell for MDX pages.
 
-Add more `.mdx` files under `content/` to publish more static pages.
+To produce the static site bundle:
+
+```bash
+npm run build
+```
+
+To preview an already-built bundle:
+
+```bash
+npm run start
+```
 
 ## Validation
 
 ```bash
 npm run lint
-npx tsc --noEmit
 npm run build
 ```

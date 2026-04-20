@@ -13,10 +13,9 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-/public/dashboardSpec.html
+# build outputs
+/generated/
+/dist/
 
 # production
 /build
@@ -36,7 +35,3 @@ yarn-error.log*
 
 # vercel
 .vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
