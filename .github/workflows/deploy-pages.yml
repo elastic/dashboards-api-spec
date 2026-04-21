@@ -1,14 +1,6 @@
 name: Deploy Docs to GitHub Pages
 
 on:
-  push:
-    paths:
-      - openapi/kibana-openapi.yaml
-      - scripts/**
-      - package.json
-      - package-lock.json
-      - favicon.ico
-  workflow_dispatch:
 
 permissions:
   contents: read
