@@ -1,0 +1,4 @@
+# Redocly CLI configuration
+# Theme and template options are passed via CLI flags in package.json.
+# The `theme` key is only supported in Redocly's enterprise product (Redocly Workflows),
+# not the open-source @redocly/cli build-docs command.

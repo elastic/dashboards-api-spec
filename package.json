@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "generate:filtered-spec": "mkdir -p generated && node scripts/filter-openapi.mjs",
-    "generate:spec-html": "mkdir -p dist && npm run generate:filtered-spec && redocly build-docs generated/dashboard-openapi.yaml --output dist/index.html --title \"Dashboard API Reference\" --disableGoogleFont --template scripts/redoc-template.hbs && node -e \"require('node:fs').copyFileSync('favicon.ico', 'dist/favicon.ico')\"",
+    "generate:spec-html": "mkdir -p dist && npm run generate:filtered-spec && node scripts/build-docs.mjs && node -e \"require('node:fs').copyFileSync('favicon.ico', 'dist/favicon.ico')\"",
     "predev": "npm run build",
     "dev": "serve dist --listen 3000",
     "build": "npm run generate:spec-html",

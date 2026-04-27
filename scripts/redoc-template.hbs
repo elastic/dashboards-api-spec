@@ -8,13 +8,16 @@
       content="Static OpenAPI reference for Dashboard Docs."
     />
     <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
       :root {
         color-scheme: light;
         --background: #ffffff;
-        --border: #e4e4e7;
-        --foreground: #09090b;
-        --muted: #52525b;
+        --border: #e5e9f0;     /* --color-grey-20 */
+        --foreground: #343741; /* --color-ink */
+        --muted: #516381;      /* --color-subdued */
       }
 
       * {
@@ -26,7 +29,7 @@
         min-height: 100vh;
         background: var(--background);
         color: var(--foreground);
-        font-family: var(--font-geist-sans, Arial), Helvetica, sans-serif;
+        font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
@@ -112,6 +115,27 @@
           padding-left: 3rem;
           padding-right: 3rem;
         }
+      }
+
+      /* Override Redoc internals with Elastic design tokens */
+      [data-role="search:input"],
+      .redoc-wrap,
+      .redoc-wrap *:not(code):not(pre):not(code *):not(pre *) {
+        font-family: "Inter", ui-sans-serif, system-ui, sans-serif !important;
+      }
+
+      .redoc-wrap code,
+      .redoc-wrap pre,
+      .redoc-wrap code *,
+      .redoc-wrap pre * {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+      }
+
+      .redoc-wrap pre,
+      .redoc-wrap [class*="CodeBlock"],
+      .redoc-wrap [class*="code-block"] {
+        background-color: #22272e !important;
+        color: #d0d4da !important;
       }
     </style>
     {{{redocHead}}}
