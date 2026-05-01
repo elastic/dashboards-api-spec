@@ -12,7 +12,7 @@ npm run dev
 
 Open http://localhost:3000 to view the site.
 
-This previews the generated static output from `dist/`.
+This does an initial build, serves the generated output from `dist/`, and watches the site inputs for changes. When you edit the OpenAPI spec, Redoc template, filter script, or static assets, the site is rebuilt automatically. Refresh the browser to pick up the new output.
 
 ## Build pipeline
 
