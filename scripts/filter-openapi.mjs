@@ -105,6 +105,34 @@ if (spec["x-tagGroups"]) {
 
 const output = {
   ...spec,
+  info: {
+    ...spec.info,
+    title: "Kibana Dashboards and Visualizations APIs",
+    description: `\
+
+## Introduction
+
+> **Technical preview** — These APIs are available as technical preview on [Elastic Cloud Serverless](https://www.elastic.co/docs/deploy-manage/deploy/elastic-cloud/serverless) projects and Kibana 9.4.
+
+Use the Kibana Dashboards and Visualizations APIs to programmatically create, retrieve, update, and delete dashboards and visualizations.
+
+To interact with these APIs, use the following HTTP methods:
+
+- **GET**: Retrieve a resource.
+- **POST**: Create a new resource.
+- **PUT**: Replace an existing resource.
+- **DELETE**: Remove a resource.
+
+You can prepend any Kibana API endpoint with \`kbn:\` and run the request in **Dev Tools → Console**. For example:
+
+\`\`\`
+GET kbn:/api/dashboards
+\`\`\`
+
+For more information about the console, refer to [Run API requests](https://www.elastic.co/docs/explore-analyze/query-filter/tools/console).
+
+> **Note** - This documentation is derived from the \`main\` branch of the [kibana](https://github.com/elastic/kibana) repository and is provided under [Attribution-NonCommercial-NoDerivatives 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/).`,
+  },
   ...(filteredTags.length > 0 ? { tags: filteredTags } : {}),
   ...(filteredTagGroups ? { "x-tagGroups": filteredTagGroups } : {}),
   paths: filteredPaths,
@@ -115,7 +143,7 @@ const output = {
 };
 
 console.log("Writing filtered spec...");
-writeFileSync(outputFile, YAML.stringify(output), "utf8");
+writeFileSync(outputFile, YAML.stringify(output, null, { lineWidth: 0 }), "utf8");
 console.log(`Done! Written to ${outputFile.pathname}`);
 console.log(`  Paths: ${Object.keys(filteredPaths).length}`);
 console.log(`  Schemas: ${Object.keys(filteredSchemas).length}`);
