@@ -6,16 +6,37 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = fileURLToPath(new URL("../", import.meta.url));
 const distDirectory = new URL("../dist/", import.meta.url);
-const generatedSpecFile = new URL(
-  "../generated/dashboard-openapi.yaml",
-  import.meta.url,
-);
 const redocTemplateFile = new URL(
   "../scripts/redoc-template.hbs",
   import.meta.url,
 );
 
-const distIndexFile = new URL("../dist/index.html", import.meta.url);
+const generatedDocDefinitions = [
+  {
+    generatedSpecFile: new URL(
+      "../generated/introduction-openapi.yaml",
+      import.meta.url,
+    ),
+    distFile: new URL("../dist/index.html", import.meta.url),
+    title: "Kibana Dashboards and Visualizations APIs",
+  },
+  {
+    generatedSpecFile: new URL(
+      "../generated/dashboards-openapi.yaml",
+      import.meta.url,
+    ),
+    distFile: new URL("../dist/dashboards.html", import.meta.url),
+    title: "Dashboards API Reference",
+  },
+  {
+    generatedSpecFile: new URL(
+      "../generated/visualizations-openapi.yaml",
+      import.meta.url,
+    ),
+    distFile: new URL("../dist/visualizations.html", import.meta.url),
+    title: "Visualizations API Reference",
+  },
+];
 const faviconFile = new URL("../assets/favicon.ico", import.meta.url);
 const distFaviconFile = new URL("../dist/favicon.ico", import.meta.url);
 const logoFile = new URL("../assets/elastic-logo.png", import.meta.url);
@@ -69,18 +90,22 @@ async function filterSpec() {
 }
 
 async function buildHTML() {
-  console.log("Building the static HTML docs...");
-  await runCommand(redoclyCommand, [
-    "build-docs",
-    fileURLToPath(generatedSpecFile),
-    "--output",
-    fileURLToPath(distIndexFile),
-    "--title",
-    "Dashboard API Reference",
-    "--template",
-    fileURLToPath(redocTemplateFile),
-    "--disableGoogleFont",
-  ]);
+  console.log("Building the reference HTML docs...");
+
+  for (const docDefinition of generatedDocDefinitions) {
+    await runCommand(redoclyCommand, [
+      "build-docs",
+      fileURLToPath(docDefinition.generatedSpecFile),
+      "--output",
+      fileURLToPath(docDefinition.distFile),
+      "--title",
+      docDefinition.title,
+      "--template",
+      fileURLToPath(redocTemplateFile),
+      "--theme.openapi.hideDownloadButton",
+      "--disableGoogleFont",
+    ]);
+  }
 }
 
 async function copyDistAssets() {

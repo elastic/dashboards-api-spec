@@ -3,10 +3,7 @@
     <meta charset="utf-8" />
     <title>{{title}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="OpenAPI reference for Kibana Dashboards."
-    />
+    <meta name="description" content="{{title}}" />
     <link rel="icon" href="favicon.ico" sizes="any" />
     <style>
       @font-face {
@@ -15,6 +12,41 @@
         font-style: normal;
         font-weight: 100 900;
         font-display: swap;
+      }
+
+      .navigation {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding: 12.5px 20px;
+        border-bottom: 1px solid var(--border);
+        background-color: var(--background);
+      }
+
+      .navigation-logo {
+        display: block;
+        height: 40px;
+        width: auto;
+      }
+
+      .navigation-links {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .navigation-link {
+        color: var(--foreground);
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        text-decoration: none;
+      }
+
+      .navigation-link:hover,
+      .navigation-link:focus-visible {
+        color: var(--foreground);
+        text-decoration: none;
       }
 
       :root {
@@ -45,17 +77,6 @@
         background-color: transparent !important;
       }
 
-      .menu-content::before {
-        display: block;
-        height: 40px;
-        padding: 12.5px 20px;
-        background-origin: content-box;
-        content: "";
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-image: url(elastic-logo.png);
-      }
-
       * {
         box-sizing: border-box;
       }
@@ -63,16 +84,33 @@
       body {
         margin: 0;
         min-height: 100vh;
+        display: flex;
+        flex-direction: column;
         background: var(--background);
         color: var(--foreground);
         font-family: var(--font-sans) !important;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
+
+      .reference-shell {
+        flex: 1;
+        min-height: 0;
+      }
     </style>
     {{{redocHead}}}
   </head>
   <body>
+    <nav class="navigation" aria-label="Primary">
+      <a href="index.html" aria-label="Introduction">
+        <img class="navigation-logo" src="elastic-logo.png" alt="Elastic" />
+      </a>
+      <div class="navigation-links">
+        <a class="navigation-link" href="index.html">Introduction</a>
+        <a class="navigation-link" href="dashboards.html">Dashboards</a>
+        <a class="navigation-link" href="visualizations.html">Visualizations</a>
+      </div>
+    </nav>
     <div class="reference-shell">
       {{{redocHTML}}}
     </div>
