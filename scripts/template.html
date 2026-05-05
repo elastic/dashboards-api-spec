@@ -19,11 +19,12 @@
         align-items: center;
         gap: 24px;
         padding: 12.5px 20px;
+        height: var(--navigation-height);
         position: fixed;
         top: 0;
         right: 0;
         left: 0;
-        z-index: 10;
+        z-index: 20;
         border-bottom: 1px solid var(--border);
         background-color: var(--background);
       }
@@ -56,6 +57,7 @@
 
       :root {
         color-scheme: light;
+        --navigation-height: 66px;
         --background: #ffffff;
         --border: #e5e9f0; /* --color-grey-20 */
         --foreground: #343741; /* --color-ink */
@@ -87,11 +89,12 @@
       .reference-shell {
         flex: 1;
         min-height: 0;
-        padding-top: 66px;
+        padding-top: var(--navigation-height);
       }
 
       #api-reference {
-        min-height: calc(100vh - 66px);
+        --scalar-custom-header-height: var(--navigation-height);
+        min-height: calc(100vh - var(--navigation-height));
       }
     </style>
     <script src="scalar-api-reference.js"></script>
