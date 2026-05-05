@@ -1,9 +1,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>{{title}}</title>
+    <title>__REDOC_PAGE_TITLE__</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="{{title}}" />
+    <meta name="description" content="__REDOC_PAGE_TITLE__" />
     <link rel="icon" href="favicon.ico" sizes="any" />
     <style>
       @font-face {
@@ -68,20 +68,6 @@
           "Liberation Mono", "Courier New", monospace;
       }
 
-      body * {
-        font-size: 14px;
-        font-family: var(--font-sans) !important;
-      }
-
-      .menu-content {
-        border-right: 1px solid var(--border) !important;
-        background-color: var(--background) !important;
-      }
-
-      .scrollbar-container ul li label {
-        background-color: transparent !important;
-      }
-
       * {
         box-sizing: border-box;
       }
@@ -103,8 +89,12 @@
         min-height: 0;
         padding-top: 66px;
       }
+
+      #api-reference {
+        min-height: calc(100vh - 66px);
+      }
     </style>
-    {{{redocHead}}}
+    <script src="scalar-api-reference.js"></script>
   </head>
   <body>
     <nav class="navigation" aria-label="Primary">
@@ -113,12 +103,13 @@
       </a>
       <div class="navigation-links">
         <a class="navigation-link" href="index.html">Introduction</a>
-        <a class="navigation-link" href="dashboards.html#tag/Dashboards">Dashboards</a>
-        <a class="navigation-link" href="visualizations.html#tag/Visualizations">Visualizations</a>
+        <a class="navigation-link" href="dashboards.html">Dashboards</a>
+        <a class="navigation-link" href="visualizations.html">Visualizations</a>
       </div>
     </nav>
     <div class="reference-shell">
-      {{{redocHTML}}}
+      <div id="api-reference" data-spec-url="__API_SPEC_URL__"></div>
     </div>
+    <script src="scalar-init.mjs"></script>
   </body>
 </html>

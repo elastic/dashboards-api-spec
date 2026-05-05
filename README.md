@@ -24,10 +24,12 @@ This does an initial build, serves the generated output from `dist/`, and watche
 - `generated/introduction-openapi.yaml` is the filtered introduction spec generated during build.
 - `generated/dashboards-openapi.yaml` is the filtered dashboards spec generated during build.
 - `generated/visualizations-openapi.yaml` is the filtered visualizations spec generated during build.
-- `dist/index.html` is the generated introduction page.
-- `dist/dashboards.html` is the generated dashboards reference page.
-- `dist/visualizations.html` is the generated visualizations reference page.
-- `scripts/redoc-template.hbs` defines the shared Redoc page shell for all three pages.
+- `dist/index.html` is the generated introduction page shell.
+- `dist/dashboards.html` is the generated dashboards reference page shell.
+- `dist/visualizations.html` is the generated visualizations reference page shell.
+- `dist/introduction-openapi.yaml`, `dist/dashboards-openapi.yaml`, and `dist/visualizations-openapi.yaml` are the copied filtered specs loaded by the browser at runtime.
+- `dist/scalar-api-reference.js` is the vendored Scalar browser bundle copied from `assets/scalar-api-reference.js`.
+- `scripts/redoc-template.hbs` defines the shared page shell and the client-side Scalar bootstrap for all three pages.
 
 To produce the static site bundle:
 

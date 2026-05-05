@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "generate:filtered-spec": "mkdir -p generated && node scripts/filter-openapi.mjs",
-    "generate:spec-html": "NODE_OPTIONS=--max-old-space-size=8192 node scripts/generate-spec-html.mjs",
+    "build:dist": "NODE_OPTIONS=--max-old-space-size=8192 node scripts/build-dist.mjs",
     "dev": "NODE_OPTIONS=--max-old-space-size=8192 node scripts/dev.mjs",
     "dev:serve": "serve dist --listen 3000",
-    "build": "npm run generate:spec-html",
+    "build": "npm run build:dist",
     "prestart": "npm run build",
     "start": "serve dist --listen 3000",
     "lint": "eslint ."

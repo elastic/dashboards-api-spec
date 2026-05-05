@@ -271,13 +271,42 @@ function countComponents(filteredComponents) {
   );
 }
 
+function normalizeRendererLinks(value) {
+  if (typeof value === "string") {
+    return value
+      .replaceAll(
+        /dashboards(?:\.html)?#tag\/Dashboards(?:\/operation\/[^)\]\s"]+)?/g,
+        "dashboards.html#tag/Dashboards",
+      )
+      .replaceAll(
+        /visualizations(?:\.html)?#tag\/Visualizations(?:\/operation\/[^)\]\s"]+)?/g,
+        "visualizations.html#tag/Visualizations",
+      );
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(normalizeRendererLinks);
+  }
+
+  if (!value || typeof value !== "object") {
+    return value;
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).map(([key, nestedValue]) => [
+      key,
+      normalizeRendererLinks(nestedValue),
+    ]),
+  );
+}
+
 function buildOutputSpec({ title, description, keepPaths }) {
   const filteredPaths = getFilteredPaths(keepPaths);
   const filteredComponents = collectReferencedComponents(filteredPaths);
   const { filteredTags, filteredTagGroups } = getFilteredTags(filteredPaths);
 
   return {
-    output: {
+    output: normalizeRendererLinks({
       openapi: spec.openapi,
       info: {
         ...spec.info,
@@ -292,7 +321,7 @@ function buildOutputSpec({ title, description, keepPaths }) {
       ...(Object.keys(filteredComponents).length > 0
         ? { components: filteredComponents }
         : {}),
-    },
+    }),
     pathCount: Object.keys(filteredPaths).length,
     componentCount: countComponents(filteredComponents),
     schemaCount: Object.keys(filteredComponents.schemas ?? {}).length,
