@@ -102,6 +102,7 @@ async function buildHTML() {
       docDefinition.title,
       "--template",
       fileURLToPath(redocTemplateFile),
+      "--theme.openapi.scrollYOffset=66",
       "--theme.openapi.hideDownloadButton",
       "--disableGoogleFont",
     ]);
