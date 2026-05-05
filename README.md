@@ -16,7 +16,7 @@ Open http://localhost:3000 to view the site.
 - Dashboards reference: `http://localhost:3000/dashboards.html`
 - Visualizations reference: `http://localhost:3000/visualizations.html`
 
-This does an initial build, serves the generated output from `dist/`, and watches the site inputs for changes. When you edit the OpenAPI spec, the filter script, or the Redoc template, the site is rebuilt automatically. Refresh the browser to pick up the new output.
+This does an initial build, serves the generated output from `dist/`, and watches the site inputs for changes. When you edit the OpenAPI spec, the filter script, or the html template, the site is rebuilt automatically. Refresh the browser to pick up the new output.
 
 ## Build pipeline
 
@@ -29,7 +29,7 @@ This does an initial build, serves the generated output from `dist/`, and watche
 - `dist/visualizations.html` is the generated visualizations reference page shell.
 - `dist/introduction-openapi.yaml`, `dist/dashboards-openapi.yaml`, and `dist/visualizations-openapi.yaml` are the copied filtered specs loaded by the browser at runtime.
 - `dist/scalar-api-reference.js` is the vendored Scalar browser bundle copied from `assets/scalar-api-reference.js`.
-- `scripts/redoc-template.hbs` defines the shared page shell and the client-side Scalar bootstrap for all three pages.
+- `scripts/template.html` defines the shared page shell and the client-side Scalar bootstrap for all three pages.
 
 To produce the static site bundle:
 

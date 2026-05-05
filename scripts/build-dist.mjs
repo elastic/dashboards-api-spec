@@ -85,7 +85,7 @@ async function buildHTML() {
 
   for (const docDefinition of generatedDocDefinitions) {
     const html = template
-      .replaceAll("__REDOC_PAGE_TITLE__", docDefinition.title)
+      .replaceAll("__PAGE_TITLE__", docDefinition.title)
       .replace("__API_SPEC_URL__", docDefinition.specFileName);
 
     await writeFile(resolveRepoUrl(`dist/${docDefinition.distFileName}`), html);
