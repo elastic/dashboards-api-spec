@@ -14,6 +14,9 @@ const introductionDescription = `## Introduction
 
 Use the Kibana Dashboards and Visualizations APIs to programmatically create, retrieve, update, and delete dashboards and visualizations.
 
+- [Dashboards API reference](dashboards.html)
+- [Visualizations API reference](visualizations.html)
+
 To interact with these APIs, use the following HTTP methods:
 
 - **GET**: Retrieve a resource.
