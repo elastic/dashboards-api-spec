@@ -4,7 +4,12 @@ import globals from "globals";
 
 export default defineConfig([
   {
-    ignores: ["dist/**", "generated/**", "node_modules/**"],
+    ignores: [
+      "scripts/scalar-api-reference.js",
+      "dist/**",
+      "generated/**",
+      "node_modules/**",
+    ],
   },
   js.configs.recommended,
   {
@@ -13,6 +18,12 @@ export default defineConfig([
       ecmaVersion: "latest",
       sourceType: "module",
       globals: globals.node,
+    },
+  },
+  {
+    files: ["scripts/scalar-init.mjs"],
+    languageOptions: {
+      globals: globals.browser,
     },
   },
 ]);

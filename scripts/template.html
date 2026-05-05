@@ -1,0 +1,118 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>__PAGE_TITLE__</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="__PAGE_TITLE__" />
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <style>
+      @font-face {
+        font-family: "Inter";
+        src: url("inter-variable.woff2") format("woff2");
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+      }
+
+      .navigation {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding: 12.5px 20px;
+        height: var(--navigation-height);
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 20;
+        border-bottom: 1px solid var(--border);
+        background-color: var(--background);
+      }
+
+      .navigation-logo {
+        display: block;
+        height: 40px;
+        width: auto;
+      }
+
+      .navigation-links {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .navigation-link {
+        color: var(--foreground);
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        text-decoration: none;
+      }
+
+      .navigation-link:hover,
+      .navigation-link:focus-visible {
+        color: var(--foreground);
+        text-decoration: none;
+      }
+
+      :root {
+        color-scheme: light;
+        --navigation-height: 66px;
+        --background: #ffffff;
+        --border: #e5e9f0; /* --color-grey-20 */
+        --foreground: #343741; /* --color-ink */
+        --muted: #516381; /* --color-subdued */
+        --font-sans:
+          "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+          "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        --font-mono:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: var(--background);
+        color: var(--foreground);
+        font-family: var(--font-sans) !important;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .reference-shell {
+        flex: 1;
+        min-height: 0;
+        padding-top: var(--navigation-height);
+      }
+
+      #api-reference {
+        --scalar-custom-header-height: var(--navigation-height);
+        min-height: calc(100vh - var(--navigation-height));
+      }
+    </style>
+    <script src="scalar-api-reference.js"></script>
+  </head>
+  <body>
+    <nav class="navigation" aria-label="Primary">
+      <a href="index.html" aria-label="Introduction">
+        <img class="navigation-logo" src="elastic-logo.png" alt="Elastic" />
+      </a>
+      <div class="navigation-links">
+        <a class="navigation-link" href="index.html">Introduction</a>
+        <a class="navigation-link" href="dashboards.html">Dashboards</a>
+        <a class="navigation-link" href="visualizations.html">Visualizations</a>
+      </div>
+    </nav>
+    <div class="reference-shell">
+      <div id="api-reference" data-spec-url="__API_SPEC_URL__"></div>
+    </div>
+    <script src="scalar-init.mjs"></script>
+  </body>
+</html>
