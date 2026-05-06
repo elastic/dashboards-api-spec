@@ -4,9 +4,8 @@ const specUrl = apiReferenceContainer?.dataset.specUrl;
 const scalarCustomCss = ` .settingsButton, .sendButton, .agent-scalar,
       .agent-scalar-overlay, .agent-button-container,
       .ask-agent-scalar-input-label, .ask-agent-scalar-input,
-      .ask-agent-scalar-send, [data-addressbar-action="send"],
-      [data-testid="client-picker"], .gitbook-show, [role="search"],
-      .sidebar-search-placeholder, .references-search-additional-actions,
+      .ask-agent-scalar-send, [data-addressbar-action="send"], .gitbook-show,
+      [role="search"], .sidebar-search-placeholder, .references-search-additional-actions,
       .reference-navigation-search, .search-input, .search-button,
       .download-button, .scalar-api-client, .app-exit-button,
       .scalar-mcp-layer-link, a[href="https://www.scalar.com"]
