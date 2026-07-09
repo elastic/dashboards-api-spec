@@ -8,14 +8,92 @@ import { readFileSync, writeFileSync } from "node:fs";
 import YAML from "yaml";
 
 const inputFile = new URL("../openapi/kibana-openapi.yaml", import.meta.url);
+
+const kibanaBreakingChangesUrl =
+  "https://www.elastic.co/docs/release-notes/kibana/breaking-changes";
+const serverlessBreakingChangesUrl =
+  "https://www.elastic.co/docs/release-notes/cloud-serverless/breaking-changes";
+
+// Builds a Markdown "Stability" section: a status table plus the breaking-changes
+// footnotes referenced by the ¹ and ² markers in the cells. The API name column
+// is included on the introduction (multiple rows) and dropped on single-API pages.
+// Footnotes are omitted when no row carries a breaking-changes marker.
+function buildStabilitySection(
+  rows,
+  { plural = false, showName = true } = {},
+) {
+  const columns = showName
+    ? ["API", "9.4", "9.5", "Serverless"]
+    : ["9.4", "9.5", "Serverless"];
+  const header = `| ${columns.join(" | ")} |\n| ${columns
+    .map(() => "---")
+    .join(" | ")} |`;
+  // Show an en dash (not the banned em dash) when an API is not available.
+  const formatCell = (cell) => (cell === "" ? "–" : cell);
+  const body = rows
+    .map((row) => {
+      const cells = showName
+        ? [row.name, row.v94, row.v95, row.serverless]
+        : [row.v94, row.v95, row.serverless];
+      return `| ${cells.map(formatCell).join(" | ")} |`;
+    })
+    .join("\n");
+
+  const hasFootnotes = rows.some((row) =>
+    [row.v94, row.v95, row.serverless].some((cell) => /[¹²]/.test(cell)),
+  );
+
+  let section = `## Stability
+
+${header}\n${body}`;
+
+  if (hasFootnotes) {
+    const apiNoun = plural ? "these APIs" : "this API";
+    section += `
+
+¹ This version introduces breaking changes. Refer to the [Kibana release notes](${kibanaBreakingChangesUrl}).
+
+² On July 13, 2026, a new version of ${apiNoun} releases and introduces breaking changes. Refer to the [Elastic Cloud Serverless release notes](${serverlessBreakingChangesUrl}).`;
+  }
+
+  return section;
+}
+
+// Builds the shared "About this documentation" section (provenance, currency,
+// and license), reused on the introduction and on each API page.
+function buildAboutSection({ plural } = { plural: false }) {
+  const apiNoun = plural ? "these APIs" : "this API";
+  return `## About this documentation
+
+This documentation is derived from the \`main\` branch of the [kibana](https://github.com/elastic/kibana) repository, so it reflects only the latest state of ${apiNoun}. To learn about changes between versions, refer to the release notes. This content is provided under [Attribution-NonCommercial-NoDerivatives 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/).`;
+}
+
+const dashboardsStabilityRow = {
+  name: "Dashboards",
+  v94: "Experimental",
+  v95: "Generally available ¹",
+  serverless: "Generally available ²",
+};
+const visualizationsStabilityRow = {
+  name: "Visualizations",
+  v94: "Experimental",
+  v95: "Generally available ¹",
+  serverless: "Generally available ²",
+};
+const tagsStabilityRow = {
+  name: "Tags",
+  v94: "",
+  v95: "Experimental",
+  serverless: "Experimental",
+};
+
 const introductionDescription = `## Introduction
 
-> **Technical preview** - These APIs are available as technical preview on [Elastic Cloud Serverless](https://www.elastic.co/docs/deploy-manage/deploy/elastic-cloud/serverless) projects and Kibana 9.4.
-
-Use the Kibana Dashboards and Visualizations APIs to programmatically create, retrieve, update, and delete dashboards and visualizations.
+Use the Kibana Dashboards, Visualizations, and Tags APIs to programmatically create, retrieve, update, and delete dashboards, visualizations, and tags.
 
 - [Dashboards API reference](dashboards.html)
 - [Visualizations API reference](visualizations.html)
+- [Tags API reference](tags.html)
 
 To interact with these APIs, use the following HTTP methods:
 
@@ -32,12 +110,14 @@ GET kbn:/api/dashboards
 
 For more information about the console, refer to [Run API requests](https://www.elastic.co/docs/explore-analyze/query-filter/tools/console).
 
-> **Note** - This documentation is derived from the \`main\` branch of the [kibana](https://github.com/elastic/kibana) repository and is provided under [Attribution-NonCommercial-NoDerivatives 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/).`;
+${buildStabilitySection([dashboardsStabilityRow, visualizationsStabilityRow, tagsStabilityRow], { plural: true })}
+
+${buildAboutSection({ plural: true })}`;
 
 const outputDefinitions = [
   {
     id: "introduction",
-    title: "Kibana Dashboards and Visualizations APIs",
+    title: "Kibana Dashboards, Visualizations, and Tags APIs",
     description: introductionDescription,
     outputFile: new URL(
       "../generated/introduction-openapi.yaml",
@@ -48,8 +128,11 @@ const outputDefinitions = [
   {
     id: "dashboards",
     title: "Kibana Dashboards API",
-    description:
-      "Use the Kibana Dashboards API to programmatically create, retrieve, update, and delete dashboards.",
+    description: `Use the Kibana Dashboards API to programmatically create, retrieve, update, and delete dashboards.
+
+${buildStabilitySection([dashboardsStabilityRow], { showName: false })}
+
+${buildAboutSection()}`,
     outputFile: new URL(
       "../generated/dashboards-openapi.yaml",
       import.meta.url,
@@ -59,13 +142,27 @@ const outputDefinitions = [
   {
     id: "visualizations",
     title: "Kibana Visualizations API",
-    description:
-      "Use the Kibana Visualizations API to programmatically create, retrieve, update, and delete visualizations.",
+    description: `Use the Kibana Visualizations API to programmatically create, retrieve, update, and delete visualizations.
+
+${buildStabilitySection([visualizationsStabilityRow], { showName: false })}
+
+${buildAboutSection()}`,
     outputFile: new URL(
       "../generated/visualizations-openapi.yaml",
       import.meta.url,
     ),
     keepPaths: ["/api/visualizations", "/api/visualizations/{id}"],
+  },
+  {
+    id: "tags",
+    title: "Kibana Tags API",
+    description: `Use the Kibana Tags API to programmatically create, retrieve, update, and delete tags. Tags help you categorize saved objects such as dashboards and visualizations, so you can filter and find related content more easily.
+
+${buildStabilitySection([tagsStabilityRow], { showName: false })}
+
+${buildAboutSection()}`,
+    outputFile: new URL("../generated/tags-openapi.yaml", import.meta.url),
+    keepPaths: ["/api/tags", "/api/tags/{id}"],
   },
 ];
 
@@ -281,6 +378,10 @@ function normalizeRendererLinks(value) {
       .replaceAll(
         /visualizations(?:\.html)?#tag\/Visualizations(?:\/operation\/[^)\]\s"]+)?/g,
         "visualizations.html#tag/Visualizations",
+      )
+      .replaceAll(
+        /tags(?:\.html)?#tag\/Tags(?:\/operation\/[^)\]\s"]+)?/g,
+        "tags.html#tag/Tags",
       );
   }
 
