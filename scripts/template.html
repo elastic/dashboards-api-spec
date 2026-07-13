@@ -55,6 +55,70 @@
         text-decoration: none;
       }
 
+      .navigation-release-notes {
+        margin-left: auto;
+        position: relative;
+      }
+
+      .navigation-release-notes > summary {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        color: var(--foreground);
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        list-style: none;
+      }
+
+      .navigation-release-notes > summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .navigation-release-notes > summary::after {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-right: 1.5px solid var(--muted);
+        border-bottom: 1.5px solid var(--muted);
+        transform: rotate(45deg) translateY(-2px);
+      }
+
+      .navigation-release-notes[open] > summary::after {
+        transform: rotate(-135deg) translateY(-2px);
+      }
+
+      .navigation-release-notes-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        min-width: 180px;
+        display: flex;
+        flex-direction: column;
+        padding: 6px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background-color: var(--background);
+        box-shadow: 0 6px 16px rgba(52, 55, 65, 0.12);
+      }
+
+      .navigation-release-notes-menu a {
+        display: block;
+        padding: 8px 12px;
+        border-radius: 4px;
+        color: var(--foreground);
+        font-size: 14px;
+        line-height: 20px;
+        text-decoration: none;
+      }
+
+      .navigation-release-notes-menu a:hover,
+      .navigation-release-notes-menu a:focus-visible {
+        background-color: var(--border);
+        text-decoration: none;
+      }
+
       :root {
         color-scheme: light;
         --navigation-height: 66px;
@@ -108,7 +172,25 @@
         <a class="navigation-link" href="index.html">Introduction</a>
         <a class="navigation-link" href="dashboards.html">Dashboards</a>
         <a class="navigation-link" href="visualizations.html">Visualizations</a>
+        <a class="navigation-link" href="tags.html">Tags</a>
       </div>
+      <details class="navigation-release-notes">
+        <summary>Release notes</summary>
+        <div class="navigation-release-notes-menu">
+          <a
+            href="https://www.elastic.co/docs/release-notes/cloud-serverless"
+            target="_blank"
+            rel="noreferrer"
+            >Serverless</a
+          >
+          <a
+            href="https://www.elastic.co/docs/release-notes/kibana"
+            target="_blank"
+            rel="noreferrer"
+            >Kibana</a
+          >
+        </div>
+      </details>
     </nav>
     <div class="reference-shell">
       <div id="api-reference" data-spec-url="__API_SPEC_URL__"></div>

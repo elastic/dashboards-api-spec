@@ -13,7 +13,7 @@ const generatedDocDefinitions = [
   {
     distFileName: "index.html",
     specFileName: "introduction-openapi.yaml",
-    title: "Kibana Dashboards and Visualizations APIs",
+    title: "Kibana Dashboards, Visualizations, and Tags APIs",
   },
   {
     distFileName: "dashboards.html",
@@ -24,6 +24,11 @@ const generatedDocDefinitions = [
     distFileName: "visualizations.html",
     specFileName: "visualizations-openapi.yaml",
     title: "Visualizations API Reference",
+  },
+  {
+    distFileName: "tags.html",
+    specFileName: "tags-openapi.yaml",
+    title: "Tags API Reference",
   },
 ];
 const distAssetDefinitions = [
