@@ -9,6 +9,8 @@ import YAML from "yaml";
 
 const inputFile = new URL("../openapi/kibana-openapi.yaml", import.meta.url);
 
+const kibanaBreakingChangesUrl =
+  "https://www.elastic.co/docs/release-notes/kibana/breaking-changes";
 const serverlessBreakingChangesUrl =
   "https://www.elastic.co/docs/release-notes/cloud-serverless/breaking-changes";
 
@@ -35,15 +37,13 @@ const previousSpecs = [
   },
 ];
 
-// Version columns shown in the Stability table, in display order. The 9.5 column
-// is added in a follow-up PR once 9.5 ships and the spec is regenerated with GA
-// badges.
-const stabilityColumns = ["9.4", "Serverless"];
+// Version columns shown in the Stability table, in display order.
+const stabilityColumns = ["9.4", "9.5", "Serverless"];
 
 // Builds a Markdown "Stability" section: a status table plus the breaking-changes
-// footnote referenced by the ¹ marker in the cells. The API name column is
+// footnotes referenced by the ¹ and ² markers in the cells. The API name column is
 // included on the introduction (multiple rows) and dropped on single-API pages.
-// The footnote is omitted when no cell carries a marker.
+// Only footnotes whose marker appears in a cell are rendered.
 function buildStabilitySection(rows, { plural = false, showName = true } = {}) {
   const columns = showName ? ["API", ...stabilityColumns] : [...stabilityColumns];
   // Show an en dash (not the banned em dash) when an API is not available.
@@ -60,19 +60,31 @@ function buildStabilitySection(rows, { plural = false, showName = true } = {}) {
     .map((row) => `| ${rowToCells(row).map(formatCell).join(" | ")} |`)
     .join("\n");
 
-  const hasFootnote = rows.some((row) =>
-    stabilityColumns.some((column) => /¹/.test(row[column] ?? "")),
+  const apiNoun = plural ? "these APIs" : "this API";
+  const footnoteDefinitions = [
+    {
+      marker: "¹",
+      text: `¹ This version introduces breaking changes. Refer to the [Kibana release notes](${kibanaBreakingChangesUrl}).`,
+    },
+    {
+      marker: "²",
+      text: `² On July 13, 2026, a new version of ${apiNoun} releases on Elastic Cloud Serverless and introduces breaking changes. Refer to the [Elastic Cloud Serverless release notes](${serverlessBreakingChangesUrl}).`,
+    },
+  ];
+  const usedFootnotes = footnoteDefinitions.filter((footnote) =>
+    rows.some((row) =>
+      stabilityColumns.some((column) =>
+        (row[column] ?? "").includes(footnote.marker),
+      ),
+    ),
   );
 
   let section = `## Stability
 
 ${header}\n${body}`;
 
-  if (hasFootnote) {
-    const apiNoun = plural ? "these APIs" : "this API";
-    section += `
-
-¹ On July 13, 2026, a new version of ${apiNoun} releases on Elastic Cloud Serverless and introduces breaking changes. Refer to the [Elastic Cloud Serverless release notes](${serverlessBreakingChangesUrl}).`;
+  if (usedFootnotes.length > 0) {
+    section += `\n\n${usedFootnotes.map((footnote) => footnote.text).join("\n\n")}`;
   }
 
   return section;
@@ -103,16 +115,19 @@ ${bullets}`;
 const dashboardsStabilityRow = {
   name: "Dashboards",
   "9.4": "Experimental",
-  Serverless: "Generally available ¹",
+  "9.5": "Generally available ¹",
+  Serverless: "Generally available ²",
 };
 const visualizationsStabilityRow = {
   name: "Visualizations",
   "9.4": "Experimental",
-  Serverless: "Generally available ¹",
+  "9.5": "Generally available ¹",
+  Serverless: "Generally available ²",
 };
 const tagsStabilityRow = {
   name: "Tags",
   "9.4": "",
+  "9.5": "Experimental",
   Serverless: "Experimental",
 };
 
