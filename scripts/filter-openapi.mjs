@@ -12,6 +12,20 @@ const inputFile = new URL("../openapi/kibana-openapi.yaml", import.meta.url);
 const serverlessBreakingChangesUrl =
   "https://www.elastic.co/docs/release-notes/cloud-serverless/breaking-changes";
 
+// Kibana versions and deployment types whose API shape this documentation
+// matches. Update this when the published spec no longer applies to one of them.
+const validForVersions = ["Elastic Cloud Serverless"];
+
+function joinWithAnd(items) {
+  if (items.length <= 1) {
+    return items.join("");
+  }
+  if (items.length === 2) {
+    return items.join(" and ");
+  }
+  return `${items.slice(0, -1).join(", ")}, and ${items[items.length - 1]}`;
+}
+
 // Previously published spec versions, archived for users who need the payloads
 // that match an older release. We publish only the latest state. Newest first.
 const previousSpecs = [
@@ -70,7 +84,7 @@ function buildAboutSection({ plural = false, includePreviousSpecs = false } = {}
   const apiNoun = plural ? "these APIs" : "this API";
   let section = `## About this documentation
 
-This documentation is derived from the \`main\` branch of the [kibana](https://github.com/elastic/kibana) repository, so it reflects only the latest state of ${apiNoun}. To learn about changes between versions, refer to the release notes. This content is provided under [Attribution-NonCommercial-NoDerivatives 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/).`;
+This documentation is valid for ${joinWithAnd(validForVersions)}. It is derived from the \`main\` branch of the [kibana](https://github.com/elastic/kibana) repository, so it reflects only the latest state of ${apiNoun}. To learn about changes between versions, refer to the release notes. This content is provided under [Attribution-NonCommercial-NoDerivatives 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/).`;
 
   if (includePreviousSpecs && previousSpecs.length > 0) {
     const bullets = previousSpecs
