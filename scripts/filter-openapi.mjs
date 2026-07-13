@@ -16,7 +16,7 @@ const serverlessBreakingChangesUrl =
 
 // Kibana versions and deployment types whose API shape this documentation
 // matches. Update this when the published spec no longer applies to one of them.
-const validForVersions = ["Elastic Cloud Serverless"];
+const validForVersions = ["Kibana 9.5", "Elastic Cloud Serverless"];
 
 function joinWithAnd(items) {
   if (items.length <= 1) {
