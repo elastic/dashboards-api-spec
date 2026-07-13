@@ -12,10 +12,14 @@ const inputFile = new URL("../openapi/kibana-openapi.yaml", import.meta.url);
 const serverlessBreakingChangesUrl =
   "https://www.elastic.co/docs/release-notes/cloud-serverless/breaking-changes";
 
-// The full spec as published for the 9.4 technical preview, archived for users
-// who need the payloads that match that release. We publish only the latest state.
-const previousSpecUrl =
-  "https://github.com/elastic/dashboards-api-spec/blob/main/openapi/archive/kibana-openapi-9.4.yaml";
+// Previously published spec versions, archived for users who need the payloads
+// that match an older release. We publish only the latest state. Newest first.
+const previousSpecs = [
+  {
+    label: "Kibana 9.4 (experimental)",
+    url: "https://github.com/elastic/dashboards-api-spec/blob/main/openapi/archive/kibana-openapi-9.4-experimental.yaml",
+  },
+];
 
 // Version columns shown in the Stability table, in display order. The 9.5 column
 // is added in a follow-up PR once 9.5 ships and the spec is regenerated with GA
@@ -61,15 +65,25 @@ ${header}\n${body}`;
 }
 
 // Builds the shared "About this documentation" section (provenance, currency,
-// license, and an optional link to the archived 9.4 spec).
-function buildAboutSection({ plural = false, includePreviousSpec = false } = {}) {
+// license, and an optional list of archived specs for previous versions).
+function buildAboutSection({ plural = false, includePreviousSpecs = false } = {}) {
   const apiNoun = plural ? "these APIs" : "this API";
-  const previousSpecSentence = includePreviousSpec
-    ? ` If you use Kibana 9.4, refer to the [9.4 API specification](${previousSpecUrl}) for the payloads that match that version.`
-    : "";
-  return `## About this documentation
+  let section = `## About this documentation
 
-This documentation is derived from the \`main\` branch of the [kibana](https://github.com/elastic/kibana) repository, so it reflects only the latest state of ${apiNoun}. To learn about changes between versions, refer to the release notes.${previousSpecSentence} This content is provided under [Attribution-NonCommercial-NoDerivatives 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/).`;
+This documentation is derived from the \`main\` branch of the [kibana](https://github.com/elastic/kibana) repository, so it reflects only the latest state of ${apiNoun}. To learn about changes between versions, refer to the release notes. This content is provided under [Attribution-NonCommercial-NoDerivatives 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/).`;
+
+  if (includePreviousSpecs && previousSpecs.length > 0) {
+    const bullets = previousSpecs
+      .map((spec) => `- [${spec.label}](${spec.url})`)
+      .join("\n");
+    section += `
+
+Not using the latest? Find the specifications of previous versions:
+
+${bullets}`;
+  }
+
+  return section;
 }
 
 const dashboardsStabilityRow = {
@@ -113,7 +127,7 @@ For more information about the console, refer to [Run API requests](https://www.
 
 ${buildStabilitySection([dashboardsStabilityRow, visualizationsStabilityRow, tagsStabilityRow], { plural: true })}
 
-${buildAboutSection({ plural: true, includePreviousSpec: true })}`;
+${buildAboutSection({ plural: true, includePreviousSpecs: true })}`;
 
 const outputDefinitions = [
   {
@@ -133,7 +147,7 @@ const outputDefinitions = [
 
 ${buildStabilitySection([dashboardsStabilityRow], { showName: false })}
 
-${buildAboutSection({ includePreviousSpec: true })}`,
+${buildAboutSection({ includePreviousSpecs: true })}`,
     outputFile: new URL(
       "../generated/dashboards-openapi.yaml",
       import.meta.url,
@@ -147,7 +161,7 @@ ${buildAboutSection({ includePreviousSpec: true })}`,
 
 ${buildStabilitySection([visualizationsStabilityRow], { showName: false })}
 
-${buildAboutSection({ includePreviousSpec: true })}`,
+${buildAboutSection({ includePreviousSpecs: true })}`,
     outputFile: new URL(
       "../generated/visualizations-openapi.yaml",
       import.meta.url,
