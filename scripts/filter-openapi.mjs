@@ -9,82 +9,83 @@ import YAML from "yaml";
 
 const inputFile = new URL("../openapi/kibana-openapi.yaml", import.meta.url);
 
-const kibanaBreakingChangesUrl =
-  "https://www.elastic.co/docs/release-notes/kibana/breaking-changes";
 const serverlessBreakingChangesUrl =
   "https://www.elastic.co/docs/release-notes/cloud-serverless/breaking-changes";
 
+// The full spec as published for the 9.4 technical preview, archived for users
+// who need the payloads that match that release. We publish only the latest state.
+const previousSpecUrl =
+  "https://github.com/elastic/dashboards-api-spec/blob/main/openapi/archive/kibana-openapi-9.4.yaml";
+
+// Version columns shown in the Stability table, in display order. The 9.5 column
+// is added in a follow-up PR once 9.5 ships and the spec is regenerated with GA
+// badges.
+const stabilityColumns = ["9.4", "Serverless"];
+
 // Builds a Markdown "Stability" section: a status table plus the breaking-changes
-// footnotes referenced by the ¹ and ² markers in the cells. The API name column
-// is included on the introduction (multiple rows) and dropped on single-API pages.
-// Footnotes are omitted when no row carries a breaking-changes marker.
-function buildStabilitySection(
-  rows,
-  { plural = false, showName = true } = {},
-) {
-  const columns = showName
-    ? ["API", "9.4", "9.5", "Serverless"]
-    : ["9.4", "9.5", "Serverless"];
+// footnote referenced by the ¹ marker in the cells. The API name column is
+// included on the introduction (multiple rows) and dropped on single-API pages.
+// The footnote is omitted when no cell carries a marker.
+function buildStabilitySection(rows, { plural = false, showName = true } = {}) {
+  const columns = showName ? ["API", ...stabilityColumns] : [...stabilityColumns];
+  // Show an en dash (not the banned em dash) when an API is not available.
+  const formatCell = (cell) => (cell === "" ? "–" : cell);
+  const rowToCells = (row) => [
+    ...(showName ? [row.name] : []),
+    ...stabilityColumns.map((column) => row[column] ?? ""),
+  ];
+
   const header = `| ${columns.join(" | ")} |\n| ${columns
     .map(() => "---")
     .join(" | ")} |`;
-  // Show an en dash (not the banned em dash) when an API is not available.
-  const formatCell = (cell) => (cell === "" ? "–" : cell);
   const body = rows
-    .map((row) => {
-      const cells = showName
-        ? [row.name, row.v94, row.v95, row.serverless]
-        : [row.v94, row.v95, row.serverless];
-      return `| ${cells.map(formatCell).join(" | ")} |`;
-    })
+    .map((row) => `| ${rowToCells(row).map(formatCell).join(" | ")} |`)
     .join("\n");
 
-  const hasFootnotes = rows.some((row) =>
-    [row.v94, row.v95, row.serverless].some((cell) => /[¹²]/.test(cell)),
+  const hasFootnote = rows.some((row) =>
+    stabilityColumns.some((column) => /¹/.test(row[column] ?? "")),
   );
 
   let section = `## Stability
 
 ${header}\n${body}`;
 
-  if (hasFootnotes) {
+  if (hasFootnote) {
     const apiNoun = plural ? "these APIs" : "this API";
     section += `
 
-¹ This version introduces breaking changes. Refer to the [Kibana release notes](${kibanaBreakingChangesUrl}).
-
-² On July 13, 2026, a new version of ${apiNoun} releases and introduces breaking changes. Refer to the [Elastic Cloud Serverless release notes](${serverlessBreakingChangesUrl}).`;
+¹ On July 13, 2026, a new version of ${apiNoun} releases on Elastic Cloud Serverless and introduces breaking changes. Refer to the [Elastic Cloud Serverless release notes](${serverlessBreakingChangesUrl}).`;
   }
 
   return section;
 }
 
 // Builds the shared "About this documentation" section (provenance, currency,
-// and license), reused on the introduction and on each API page.
-function buildAboutSection({ plural } = { plural: false }) {
+// license, and an optional link to the archived 9.4 spec).
+function buildAboutSection({ plural = false, includePreviousSpec = false } = {}) {
   const apiNoun = plural ? "these APIs" : "this API";
+  const previousSpecSentence = includePreviousSpec
+    ? ` If you use Kibana 9.4, refer to the [9.4 API specification](${previousSpecUrl}) for the payloads that match that version.`
+    : "";
   return `## About this documentation
 
-This documentation is derived from the \`main\` branch of the [kibana](https://github.com/elastic/kibana) repository, so it reflects only the latest state of ${apiNoun}. To learn about changes between versions, refer to the release notes. This content is provided under [Attribution-NonCommercial-NoDerivatives 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/).`;
+This documentation is derived from the \`main\` branch of the [kibana](https://github.com/elastic/kibana) repository, so it reflects only the latest state of ${apiNoun}. To learn about changes between versions, refer to the release notes.${previousSpecSentence} This content is provided under [Attribution-NonCommercial-NoDerivatives 4.0 International](https://creativecommons.org/licenses/by-nc-nd/4.0/).`;
 }
 
 const dashboardsStabilityRow = {
   name: "Dashboards",
-  v94: "Experimental",
-  v95: "Generally available ¹",
-  serverless: "Generally available ²",
+  "9.4": "Experimental",
+  Serverless: "Generally available ¹",
 };
 const visualizationsStabilityRow = {
   name: "Visualizations",
-  v94: "Experimental",
-  v95: "Generally available ¹",
-  serverless: "Generally available ²",
+  "9.4": "Experimental",
+  Serverless: "Generally available ¹",
 };
 const tagsStabilityRow = {
   name: "Tags",
-  v94: "",
-  v95: "Experimental",
-  serverless: "Experimental",
+  "9.4": "",
+  Serverless: "Experimental",
 };
 
 const introductionDescription = `## Introduction
@@ -112,7 +113,7 @@ For more information about the console, refer to [Run API requests](https://www.
 
 ${buildStabilitySection([dashboardsStabilityRow, visualizationsStabilityRow, tagsStabilityRow], { plural: true })}
 
-${buildAboutSection({ plural: true })}`;
+${buildAboutSection({ plural: true, includePreviousSpec: true })}`;
 
 const outputDefinitions = [
   {
@@ -132,7 +133,7 @@ const outputDefinitions = [
 
 ${buildStabilitySection([dashboardsStabilityRow], { showName: false })}
 
-${buildAboutSection()}`,
+${buildAboutSection({ includePreviousSpec: true })}`,
     outputFile: new URL(
       "../generated/dashboards-openapi.yaml",
       import.meta.url,
@@ -146,7 +147,7 @@ ${buildAboutSection()}`,
 
 ${buildStabilitySection([visualizationsStabilityRow], { showName: false })}
 
-${buildAboutSection()}`,
+${buildAboutSection({ includePreviousSpec: true })}`,
     outputFile: new URL(
       "../generated/visualizations-openapi.yaml",
       import.meta.url,

@@ -22,6 +22,7 @@ This does an initial build, serves the generated output from `dist/`, and watche
 ## Build pipeline
 
 - `openapi/kibana-openapi.yaml` is the source OpenAPI spec.
+- `openapi/archive/` keeps previously published spec versions (for example `kibana-openapi-9.4.yaml`) for reference. They are not built into the site, but are linked from the docs so users on older versions can still find the matching spec.
 - `generated/introduction-openapi.yaml` is the filtered introduction spec generated during build.
 - `generated/dashboards-openapi.yaml` is the filtered dashboards spec generated during build.
 - `generated/visualizations-openapi.yaml` is the filtered visualizations spec generated during build.
