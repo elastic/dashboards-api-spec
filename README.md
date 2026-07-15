@@ -1,6 +1,6 @@
 # Kibana API Docs
 
-Static API docs site that builds an introduction page plus separate dashboards, visualizations, and tags references.
+Static API docs site that builds an introduction page plus separate dashboards, visualizations, markdowns, links, and tags references.
 
 ## Development
 
@@ -15,6 +15,8 @@ Open http://localhost:3000 to view the site.
 - Introduction: `http://localhost:3000/`
 - Dashboards reference: `http://localhost:3000/dashboards.html`
 - Visualizations reference: `http://localhost:3000/visualizations.html`
+- Markdowns reference: `http://localhost:3000/markdowns.html`
+- Links reference: `http://localhost:3000/links.html`
 - Tags reference: `http://localhost:3000/tags.html`
 
 This does an initial build, serves the generated output from `dist/`, and watches the site inputs for changes. When you edit the OpenAPI spec, the filter script, or the html template, the site is rebuilt automatically. Refresh the browser to pick up the new output.
@@ -26,12 +28,16 @@ This does an initial build, serves the generated output from `dist/`, and watche
 - `generated/introduction-openapi.yaml` is the filtered introduction spec generated during build.
 - `generated/dashboards-openapi.yaml` is the filtered dashboards spec generated during build.
 - `generated/visualizations-openapi.yaml` is the filtered visualizations spec generated during build.
+- `generated/markdowns-openapi.yaml` is the filtered markdowns spec generated during build.
+- `generated/links-openapi.yaml` is the filtered links spec generated during build.
 - `generated/tags-openapi.yaml` is the filtered tags spec generated during build.
 - `dist/index.html` is the generated introduction page shell.
 - `dist/dashboards.html` is the generated dashboards reference page shell.
 - `dist/visualizations.html` is the generated visualizations reference page shell.
+- `dist/markdowns.html` is the generated markdowns reference page shell.
+- `dist/links.html` is the generated links reference page shell.
 - `dist/tags.html` is the generated tags reference page shell.
-- `dist/introduction-openapi.yaml`, `dist/dashboards-openapi.yaml`, `dist/visualizations-openapi.yaml`, and `dist/tags-openapi.yaml` are the copied filtered specs loaded by the browser at runtime.
+- `dist/introduction-openapi.yaml`, `dist/dashboards-openapi.yaml`, `dist/visualizations-openapi.yaml`, `dist/markdowns-openapi.yaml`, `dist/links-openapi.yaml`, and `dist/tags-openapi.yaml` are the copied filtered specs loaded by the browser at runtime.
 - `dist/scalar-api-reference.js` is the vendored Scalar browser bundle copied from `assets/scalar-api-reference.js`.
 - `scripts/template.html` defines the shared page shell and the client-side Scalar bootstrap for all four pages.
 

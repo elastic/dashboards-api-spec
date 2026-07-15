@@ -110,6 +110,16 @@ const visualizationsStabilityRow = {
   "9.4": "Experimental",
   Serverless: "Generally available ¹",
 };
+const markdownsStabilityRow = {
+  name: "Markdowns",
+  "9.4": "",
+  Serverless: "Experimental",
+};
+const linksStabilityRow = {
+  name: "Links",
+  "9.4": "",
+  Serverless: "Experimental",
+};
 const tagsStabilityRow = {
   name: "Tags",
   "9.4": "",
@@ -118,10 +128,12 @@ const tagsStabilityRow = {
 
 const introductionDescription = `## Introduction
 
-Use the Kibana Dashboards, Visualizations, and Tags APIs to programmatically create, retrieve, update, and delete dashboards, visualizations, and tags.
+Use the Kibana Dashboards, Visualizations, Markdowns, Links, and Tags APIs to programmatically create, retrieve, update, and delete dashboards, visualizations, markdown library items, links library items, and tags.
 
 - [Dashboards API reference](dashboards.html)
 - [Visualizations API reference](visualizations.html)
+- [Markdowns API reference](markdowns.html)
+- [Links API reference](links.html)
 - [Tags API reference](tags.html)
 
 To interact with these APIs, use the following HTTP methods:
@@ -139,14 +151,14 @@ GET kbn:/api/dashboards
 
 For more information about the console, refer to [Run API requests](https://www.elastic.co/docs/explore-analyze/query-filter/tools/console).
 
-${buildStabilitySection([dashboardsStabilityRow, visualizationsStabilityRow, tagsStabilityRow], { plural: true })}
+${buildStabilitySection([dashboardsStabilityRow, visualizationsStabilityRow, markdownsStabilityRow, linksStabilityRow, tagsStabilityRow], { plural: true })}
 
 ${buildAboutSection({ plural: true, includePreviousSpecs: true })}`;
 
 const outputDefinitions = [
   {
     id: "introduction",
-    title: "Kibana Dashboards, Visualizations, and Tags APIs",
+    title: "Kibana Dashboards, Visualizations, Markdowns, Links, and Tags APIs",
     description: introductionDescription,
     outputFile: new URL(
       "../generated/introduction-openapi.yaml",
@@ -181,6 +193,28 @@ ${buildAboutSection({ includePreviousSpecs: true })}`,
       import.meta.url,
     ),
     keepPaths: ["/api/visualizations", "/api/visualizations/{id}"],
+  },
+  {
+    id: "markdowns",
+    title: "Kibana Markdowns API",
+    description: `Use the Kibana Markdowns API to programmatically create, retrieve, update, and delete markdown library items. Markdown library items store reusable text content that you can add to dashboards as panels.
+
+${buildStabilitySection([markdownsStabilityRow], { showName: false })}
+
+${buildAboutSection()}`,
+    outputFile: new URL("../generated/markdowns-openapi.yaml", import.meta.url),
+    keepPaths: ["/api/markdowns", "/api/markdowns/{id}"],
+  },
+  {
+    id: "links",
+    title: "Kibana Links API",
+    description: `Use the Kibana Links API to programmatically create, retrieve, update, and delete links library items. Links library items store reusable collections of links that you can add to dashboards as panels to navigate between dashboards and to external websites.
+
+${buildStabilitySection([linksStabilityRow], { showName: false })}
+
+${buildAboutSection()}`,
+    outputFile: new URL("../generated/links-openapi.yaml", import.meta.url),
+    keepPaths: ["/api/links", "/api/links/{id}"],
   },
   {
     id: "tags",
@@ -407,6 +441,14 @@ function normalizeRendererLinks(value) {
       .replaceAll(
         /visualizations(?:\.html)?#tag\/Visualizations(?:\/operation\/[^)\]\s"]+)?/g,
         "visualizations.html#tag/Visualizations",
+      )
+      .replaceAll(
+        /markdowns(?:\.html)?#tag\/Markdowns(?:\/operation\/[^)\]\s"]+)?/g,
+        "markdowns.html#tag/Markdowns",
+      )
+      .replaceAll(
+        /links(?:\.html)?#tag\/Links(?:\/operation\/[^)\]\s"]+)?/g,
+        "links.html#tag/Links",
       )
       .replaceAll(
         /tags(?:\.html)?#tag\/Tags(?:\/operation\/[^)\]\s"]+)?/g,
