@@ -13,7 +13,7 @@ const generatedDocDefinitions = [
   {
     distFileName: "index.html",
     specFileName: "introduction-openapi.yaml",
-    title: "Kibana Dashboards, Visualizations, and Tags APIs",
+    title: "Kibana Dashboards, Visualizations, Markdowns, Links, and Tags APIs",
   },
   {
     distFileName: "dashboards.html",
@@ -24,6 +24,16 @@ const generatedDocDefinitions = [
     distFileName: "visualizations.html",
     specFileName: "visualizations-openapi.yaml",
     title: "Visualizations API Reference",
+  },
+  {
+    distFileName: "markdowns.html",
+    specFileName: "markdowns-openapi.yaml",
+    title: "Markdowns API Reference",
+  },
+  {
+    distFileName: "links.html",
+    specFileName: "links-openapi.yaml",
+    title: "Links API Reference",
   },
   {
     distFileName: "tags.html",
