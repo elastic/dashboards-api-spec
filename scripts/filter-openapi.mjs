@@ -116,6 +116,7 @@ function buildPanelAvailabilitySection() {
     ["APM service map", since("9.5"), "N/A"],
     ["Machine learning and AIOps", since("9.5"), "N/A"],
     ["Maps", "Coming soon", "Coming soon"],
+    ["Vega", "Coming soon", "Coming soon"],
     ["Legacy visualizations", "N/A", "N/A"],
   ];
 
