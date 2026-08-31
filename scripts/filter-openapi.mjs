@@ -90,205 +90,43 @@ ${header}\n${body}`;
   return section;
 }
 
-// Embedding values use the same wording as the Dashboards tag "Embedding library
-// items" section: "inline" and "linked from library".
-const EMBED_INLINE = "Inline";
-const EMBED_INLINE_OR_LIBRARY = "Inline or linked from library";
-
-// Panel types present on kibana `origin/9.4` (`oas_docs/output/kibana.yaml`).
-const panelTypeSince94 = "Experimental";
-// Panel types present on kibana `origin/9.5` and serverless OAS.
-const panelTypeGa = "Generally available";
-
-// Per-panel-type availability for the Dashboards API intro. Source of truth:
-// `kbn-dashboard-panel-type-*` schemas on kibana `origin/9.4` vs `origin/9.5`
-// (not the 9.4 archived spec in this repo, which included types that never
-// shipped on the 9.4 branch). Omit types that are not in the published spec
-// yet (for example `custom_content` on kibana `main` / 9.6).
+// Per-panel-type availability for the Dashboards API intro.
+// Inline dates: first Stack minor whose `kbn-dashboard-panel-type-*` schema
+// accepted that type (kibana `origin/9.4`, `origin/9.5`, `origin/main` = 9.6).
+// Linked-from-library dates: first Stack minor with a library CRUD API for
+// that type (`/api/visualizations` on 9.4). `/api/markdowns` and `/api/links`
+// are public on Serverless and kibana `main` (unreleased 9.6), not 9.4 or 9.5,
+// so those cells say "Serverless only" until 9.6 ships. Discover sessions use
+// saved search IDs and were in the 9.4 dashboard schema. Omit types that are
+// not in the published spec yet (for example `custom_content` on kibana `main`).
 function buildPanelAvailabilitySection() {
-  const columns = ["Type", ...stabilityColumns, "Embedding"];
-  const formatCell = (cell) => (cell === "" ? "–" : cell);
+  const columns = ["Panel type", "Inline", "Linked from library"];
+  const since = (version) => `Since ${version}`;
   const rows = [
-    {
-      type: "`vis`",
-      "9.4": panelTypeSince94,
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE_OR_LIBRARY,
-    },
-    {
-      type: "`discover_session`",
-      "9.4": panelTypeSince94,
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE_OR_LIBRARY,
-    },
-    {
-      type: "`image`",
-      "9.4": panelTypeSince94,
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`markdown`",
-      "9.4": panelTypeSince94,
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE_OR_LIBRARY,
-    },
-    {
-      type: "`links`",
-      "9.4": "",
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE_OR_LIBRARY,
-    },
-    {
-      type: "`esql_control`",
-      "9.4": panelTypeSince94,
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`options_list_control`",
-      "9.4": panelTypeSince94,
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`range_slider_control`",
-      "9.4": panelTypeSince94,
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`time_slider_control`",
-      "9.4": panelTypeSince94,
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`slo_alerts`",
-      "9.4": panelTypeSince94,
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`slo_burn_rate`",
-      "9.4": panelTypeSince94,
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`slo_error_budget`",
-      "9.4": panelTypeSince94,
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`slo_overview`",
-      "9.4": panelTypeSince94,
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`synthetics_monitors`",
-      "9.4": panelTypeSince94,
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`synthetics_stats_overview`",
-      "9.4": panelTypeSince94,
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`apm_service_map`",
-      "9.4": "",
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`ml_single_metric_viewer`",
-      "9.4": "",
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`ml_anomaly_swimlane`",
-      "9.4": "",
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`ml_anomaly_charts`",
-      "9.4": "",
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`aiops_change_point_chart`",
-      "9.4": "",
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`aiops_log_rate_analysis`",
-      "9.4": "",
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`aiops_pattern_analysis`",
-      "9.4": "",
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
-    {
-      type: "`field_stats_table`",
-      "9.4": "",
-      "9.5": panelTypeGa,
-      Serverless: panelTypeGa,
-      Embedding: EMBED_INLINE,
-    },
+    ["Visualizations", since("9.4"), since("9.4")],
+    ["Discover sessions", since("9.4"), since("9.4")],
+    ["Images", since("9.4"), "N/A"],
+    ["Markdown", since("9.4"), "Serverless only"],
+    ["Links", since("9.5"), "Serverless only"],
+    ["Controls", since("9.4"), "N/A"],
+    ["SLO", since("9.4"), "N/A"],
+    ["Synthetics", since("9.4"), "N/A"],
+    ["APM service map", since("9.5"), "N/A"],
+    ["Machine learning and AIOps", since("9.5"), "N/A"],
+    ["Maps", "N/A", "N/A"],
+    ["Legacy visualizations", "N/A", "N/A"],
   ];
 
   const header = `| ${columns.join(" | ")} |\n| ${columns
     .map(() => "---")
     .join(" | ")} |`;
-  const body = rows
-    .map((row) => {
-      const cells = [
-        row.type,
-        ...stabilityColumns.map((column) => row[column] ?? ""),
-        row.Embedding,
-      ];
-      return `| ${cells.map(formatCell).join(" | ")} |`;
-    })
-    .join("\n");
+  const body = rows.map((row) => `| ${row.join(" | ")} |`).join("\n");
 
   return `## Panel type availability
 
-The following table shows which Kibana version first included each panel type, and whether you store the panel \`config\` inline, link it from a library item, or both. No panel type is linked from a library item only. \`map\` and \`legacy_vis\` are not listed: the REST API does not support them yet.
+When you use the Dashboards API, you can specify a panel **inline** so it exists only in that dashboard. You can also reference a panel already saved to the library, and link it from multiple dashboards.
+
+Support for some panel types is added over time. Available types depend on your Kibana version.
 
 ${header}
 ${body}`;
