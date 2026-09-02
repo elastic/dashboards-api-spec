@@ -90,6 +90,51 @@ ${header}\n${body}`;
   return section;
 }
 
+// Per-panel-type availability for the Dashboards API intro.
+// Inline dates: first Stack minor whose `kbn-dashboard-panel-type-*` schema
+// accepted that type (kibana `origin/9.4`, `origin/9.5`, `origin/main` = 9.6).
+// Linked-from-library dates: first Stack minor with a library CRUD API for
+// that type (`/api/visualizations` on 9.4). `/api/markdowns` and `/api/links`
+// are public on Serverless and kibana `main` (unreleased 9.6), not 9.4 or 9.5,
+// so those cells say "Serverless only" until 9.6 ships. Discover sessions use
+// saved search IDs and were in the 9.4 dashboard schema. Maps have no REST
+// schema yet; cells say "Coming soon". Image panels are always inline (`file_id`
+// or URL, no `ref_id`). Omit types that are not in the published spec yet
+// (for example `custom_content` on kibana `main`).
+function buildPanelAvailabilitySection() {
+  const columns = ["Panel type", "Inline", "Linked from library"];
+  const since = (version) => `Since ${version}`;
+  const rows = [
+    ["Visualizations", since("9.4"), since("9.4")],
+    ["Discover sessions", since("9.4"), since("9.4")],
+    ["Images", since("9.4"), "N/A"],
+    ["Markdown", since("9.4"), since("9.4")],
+    ["Links", since("9.5"), since("9.5")],
+    ["Controls", since("9.4"), "N/A"],
+    ["SLO", since("9.4"), "N/A"],
+    ["Synthetics", since("9.4"), "N/A"],
+    ["APM service map", since("9.5"), "N/A"],
+    ["Machine learning and AIOps", since("9.5"), "N/A"],
+    ["Maps", "Coming soon", "Coming soon"],
+    ["Vega", "Coming soon", "Coming soon"],
+    ["Legacy visualizations", "N/A", "N/A"],
+  ];
+
+  const header = `| ${columns.join(" | ")} |\n| ${columns
+    .map(() => "---")
+    .join(" | ")} |`;
+  const body = rows.map((row) => `| ${row.join(" | ")} |`).join("\n");
+
+  return `## Panel type availability
+
+When you use the Dashboards API, you can specify a panel **inline** so it exists only in that dashboard. You can also reference a panel already saved to the library, and link it from multiple dashboards.
+
+Support for some panel types is added over time. Available types depend on your Kibana version.
+
+${header}
+${body}`;
+}
+
 // Builds the shared "About this documentation" section (provenance, currency,
 // license, and an optional list of archived specs for previous versions).
 function buildAboutSection({ plural = false, includePreviousSpecs = false } = {}) {
@@ -187,6 +232,8 @@ const outputDefinitions = [
     description: `Use the Kibana Dashboards API to programmatically create, retrieve, update, and delete dashboards.
 
 ${buildStabilitySection([dashboardsStabilityRow], { showName: false })}
+
+${buildPanelAvailabilitySection()}
 
 ${buildAboutSection({ includePreviousSpecs: true })}`,
     outputFile: new URL(
