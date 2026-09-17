@@ -97,10 +97,11 @@ ${header}\n${body}`;
 // that type (`/api/visualizations` on 9.4). `/api/markdowns` and `/api/links`
 // are public on Serverless and kibana `main` (unreleased 9.6), not 9.4 or 9.5,
 // so those cells say "Serverless only" until 9.6 ships. Discover sessions use
-// saved search IDs and were in the 9.4 dashboard schema. Maps have no REST
-// schema yet; cells say "Coming soon". Image panels are always inline (`file_id`
-// or URL, no `ref_id`). Omit types that are not in the published spec yet
-// (for example `custom_content` on kibana `main`).
+// saved search IDs and were in the 9.4 dashboard schema. Maps, Vega, and Alerts
+// table have no REST schema yet. Maps and Vega cells say "Coming soon" for both
+// columns. Alerts table is dashboard-only (no library item), so linked-from-library
+// is N/A. Image panels are always inline (`file_id` or URL, no `ref_id`). Omit types
+// that are not in the published spec yet (for example `custom_content` on kibana `main`).
 function buildPanelAvailabilitySection() {
   const columns = ["Panel type", "Inline", "Linked from library"];
   const since = (version) => `Since ${version}`;
@@ -117,6 +118,7 @@ function buildPanelAvailabilitySection() {
     ["Machine learning and AIOps", since("9.5"), "N/A"],
     ["Maps", "Coming soon", "Coming soon"],
     ["Vega", "Coming soon", "Coming soon"],
+    ["Alerts table", "Coming soon", "N/A"],
     ["Legacy visualizations", "N/A", "N/A"],
   ];
 
