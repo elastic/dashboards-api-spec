@@ -463,6 +463,15 @@ function collectReferencedComponents(filteredPaths) {
   return filteredComponents;
 }
 
+// The Kibana external bundle now carries its own "Stability" and "Panel type
+// availability" sections in the tag descriptions. This site generates both from
+// the data above, so drop the bundled copies to avoid showing them twice.
+function stripGeneratedSections(markdown) {
+  return markdown
+    .replace(/^## Stability\n[\s\S]*?(?=^## )/m, "")
+    .replace(/^### Panel type availability\n[\s\S]*?(?=^###? )/m, "");
+}
+
 function getFilteredTags(filteredPaths) {
   const usedTags = new Set();
   forEachOperation(filteredPaths, (operation) => {
@@ -471,9 +480,13 @@ function getFilteredTags(filteredPaths) {
     }
   });
 
-  const filteredTags = (spec.tags ?? []).filter((tag) =>
-    usedTags.has(tag.name),
-  );
+  const filteredTags = (spec.tags ?? [])
+    .filter((tag) => usedTags.has(tag.name))
+    .map((tag) =>
+      typeof tag.description === "string"
+        ? { ...tag, description: stripGeneratedSections(tag.description) }
+        : tag,
+    );
 
   let filteredTagGroups;
   if (spec["x-tagGroups"]) {
