@@ -16,7 +16,7 @@ const serverlessBreakingChangesUrl =
 
 // Kibana versions and deployment types whose API shape this documentation
 // matches. Update this when the published spec no longer applies to one of them.
-const validForVersions = ["Kibana 9.5", "Elastic Cloud Serverless"];
+const validForVersions = ["Kibana 9.6", "Elastic Cloud Serverless"];
 
 function joinWithAnd(items) {
   if (items.length <= 1) {
@@ -38,7 +38,7 @@ const previousSpecs = [
 ];
 
 // Version columns shown in the Stability table, in display order.
-const stabilityColumns = ["9.4", "9.5", "Serverless"];
+const stabilityColumns = ["9.4", "9.5", "9.6", "Serverless"];
 
 // Builds a Markdown "Stability" section: a status table plus the breaking-changes
 // footnotes referenced by the ¹ and ² markers in the cells. The API name column is
@@ -163,28 +163,33 @@ const dashboardsStabilityRow = {
   name: "Dashboards",
   "9.4": "Experimental",
   "9.5": "Generally available ¹",
+  "9.6": "Generally available",
   Serverless: "Generally available ²",
 };
 const visualizationsStabilityRow = {
   name: "Visualizations",
   "9.4": "Experimental",
   "9.5": "Generally available ¹",
+  "9.6": "Generally available",
   Serverless: "Generally available ²",
 };
 const markdownsStabilityRow = {
   name: "Markdowns",
   "9.4": "",
+  "9.6": "Experimental",
   Serverless: "Experimental",
 };
 const linksStabilityRow = {
   name: "Links",
   "9.4": "",
+  "9.6": "Experimental",
   Serverless: "Experimental",
 };
 const tagsStabilityRow = {
   name: "Tags",
   "9.4": "",
   "9.5": "Experimental",
+  "9.6": "Experimental",
   Serverless: "Experimental",
 };
 
@@ -197,6 +202,11 @@ Use the Kibana Dashboards, Visualizations, Markdowns, Links, and Tags APIs to pr
 - [Markdowns API reference](markdowns.html)
 - [Links API reference](links.html)
 - [Tags API reference](tags.html)
+
+The following related APIs are documented in the Kibana API reference instead of on this site:
+
+- Data views v2 API: [Kibana](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-data-views-v2) or [Serverless](https://www.elastic.co/docs/api/doc/serverless/group/endpoint-data-views-v2)
+- Discover sessions API: [Kibana](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-discover-sessions) or [Serverless](https://www.elastic.co/docs/api/doc/serverless/group/endpoint-discover-sessions)
 
 To interact with these APIs, use the following HTTP methods:
 
