@@ -16,7 +16,7 @@ const serverlessBreakingChangesUrl =
 
 // Kibana versions and deployment types whose API shape this documentation
 // matches. Update this when the published spec no longer applies to one of them.
-const validForVersions = ["Kibana 9.5", "Elastic Cloud Serverless"];
+const validForVersions = ["Kibana 9.6", "Elastic Cloud Serverless"];
 
 function joinWithAnd(items) {
   if (items.length <= 1) {
@@ -38,19 +38,31 @@ const previousSpecs = [
 ];
 
 // Version columns shown in the Stability table, in display order.
-const stabilityColumns = ["9.4", "9.5", "Serverless"];
+const stabilityColumns = ["9.4", "9.5", "9.6", "Serverless"];
 
 // Builds a Markdown "Stability" section: a status table plus the breaking-changes
 // footnotes referenced by the ¹ and ² markers in the cells. The API name column is
 // included on the introduction (multiple rows) and dropped on single-API pages.
 // Only footnotes whose marker appears in a cell are rendered.
 function buildStabilitySection(rows, { plural = false, showName = true } = {}) {
-  const columns = showName ? ["API", ...stabilityColumns] : [...stabilityColumns];
+  // Drop the 9.6 column when every row has the same status as in 9.5, ignoring
+  // footnote markers. The 9.6 column only appears when it adds information.
+  const status = (cell) => (cell ?? "").replace(/\s*[¹²]/g, "").trim();
+  const columnsShown = stabilityColumns.filter(
+    (column) =>
+      column !== "9.6" ||
+      rows.some((row) => status(row["9.6"]) !== status(row["9.5"])),
+  );
+  // When 9.6 is dropped, the 9.5 column also covers 9.6 and later.
+  const headerLabels = columnsShown.map((column) =>
+    column === "9.5" && !columnsShown.includes("9.6") ? "9.5+" : column,
+  );
+  const columns = showName ? ["API", ...headerLabels] : [...headerLabels];
   // Show an en dash (not the banned em dash) when an API is not available.
   const formatCell = (cell) => (cell === "" ? "–" : cell);
   const rowToCells = (row) => [
     ...(showName ? [row.name] : []),
-    ...stabilityColumns.map((column) => row[column] ?? ""),
+    ...columnsShown.map((column) => row[column] ?? ""),
   ];
 
   const header = `| ${columns.join(" | ")} |\n| ${columns
@@ -163,29 +175,45 @@ const dashboardsStabilityRow = {
   name: "Dashboards",
   "9.4": "Experimental",
   "9.5": "Generally available ¹",
+  "9.6": "Generally available",
   Serverless: "Generally available ²",
 };
 const visualizationsStabilityRow = {
   name: "Visualizations",
   "9.4": "Experimental",
   "9.5": "Generally available ¹",
+  "9.6": "Generally available",
   Serverless: "Generally available ²",
 };
 const markdownsStabilityRow = {
   name: "Markdowns",
   "9.4": "",
+  "9.6": "Experimental",
   Serverless: "Experimental",
 };
 const linksStabilityRow = {
   name: "Links",
   "9.4": "",
+  "9.6": "Experimental",
   Serverless: "Experimental",
 };
 const tagsStabilityRow = {
   name: "Tags",
   "9.4": "",
   "9.5": "Experimental",
+  "9.6": "Experimental",
   Serverless: "Experimental",
+};
+
+const dataViewsV2StabilityRow = {
+  name: "[Data views v2](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-data-views-v2)",
+  "9.6": "Generally available",
+  Serverless: "Generally available",
+};
+const discoverSessionsStabilityRow = {
+  name: "[Discover sessions](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-discover-sessions)",
+  "9.6": "Generally available",
+  Serverless: "Generally available",
 };
 
 const introductionDescription = `## Introduction
@@ -197,6 +225,10 @@ Use the Kibana Dashboards, Visualizations, Markdowns, Links, and Tags APIs to pr
 - [Markdowns API reference](markdowns.html)
 - [Links API reference](links.html)
 - [Tags API reference](tags.html)
+- [Data views v2 API reference ↗](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-data-views-v2) ([Serverless ↗](https://www.elastic.co/docs/api/doc/serverless/group/endpoint-data-views-v2))
+- [Discover sessions API reference ↗](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-discover-sessions) ([Serverless ↗](https://www.elastic.co/docs/api/doc/serverless/group/endpoint-discover-sessions))
+
+The ↗ icon marks references that open in the Kibana API docs instead of on this site.
 
 To interact with these APIs, use the following HTTP methods:
 
@@ -213,7 +245,7 @@ GET kbn:/api/dashboards
 
 For more information about the console, refer to [Run API requests](https://www.elastic.co/docs/explore-analyze/query-filter/tools/console).
 
-${buildStabilitySection([dashboardsStabilityRow, visualizationsStabilityRow, markdownsStabilityRow, linksStabilityRow, tagsStabilityRow], { plural: true })}
+${buildStabilitySection([dashboardsStabilityRow, visualizationsStabilityRow, markdownsStabilityRow, linksStabilityRow, tagsStabilityRow, dataViewsV2StabilityRow, discoverSessionsStabilityRow], { plural: true })}
 
 ${buildAboutSection({ plural: true, includePreviousSpecs: true })}`;
 
@@ -463,6 +495,15 @@ function collectReferencedComponents(filteredPaths) {
   return filteredComponents;
 }
 
+// The Kibana external bundle now carries its own "Stability" and "Panel type
+// availability" sections in the tag descriptions. This site generates both from
+// the data above, so drop the bundled copies to avoid showing them twice.
+function stripGeneratedSections(markdown) {
+  return markdown
+    .replace(/^## Stability\n[\s\S]*?(?=^## )/m, "")
+    .replace(/^### Panel type availability\n[\s\S]*?(?=^###? )/m, "");
+}
+
 function getFilteredTags(filteredPaths) {
   const usedTags = new Set();
   forEachOperation(filteredPaths, (operation) => {
@@ -471,9 +512,13 @@ function getFilteredTags(filteredPaths) {
     }
   });
 
-  const filteredTags = (spec.tags ?? []).filter((tag) =>
-    usedTags.has(tag.name),
-  );
+  const filteredTags = (spec.tags ?? [])
+    .filter((tag) => usedTags.has(tag.name))
+    .map((tag) =>
+      typeof tag.description === "string"
+        ? { ...tag, description: stripGeneratedSections(tag.description) }
+        : tag,
+    );
 
   let filteredTagGroups;
   if (spec["x-tagGroups"]) {
