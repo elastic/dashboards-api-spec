@@ -193,6 +193,17 @@ const tagsStabilityRow = {
   Serverless: "Experimental",
 };
 
+const dataViewsV2StabilityRow = {
+  name: "[Data views v2](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-data-views-v2)",
+  "9.6": "Generally available",
+  Serverless: "Generally available",
+};
+const discoverSessionsStabilityRow = {
+  name: "[Discover sessions](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-discover-sessions)",
+  "9.6": "Generally available",
+  Serverless: "Generally available",
+};
+
 const introductionDescription = `## Introduction
 
 Use the Kibana Dashboards, Visualizations, Markdowns, Links, and Tags APIs to programmatically create, retrieve, update, and delete dashboards, visualizations, markdown library items, links library items, and tags.
@@ -203,10 +214,10 @@ Use the Kibana Dashboards, Visualizations, Markdowns, Links, and Tags APIs to pr
 - [Links API reference](links.html)
 - [Tags API reference](tags.html)
 
-The following related APIs are documented in the Kibana API reference instead of on this site:
+Two related APIs are documented in the Kibana API reference instead of on this site:
 
-- Data views v2 API: [Kibana](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-data-views-v2) or [Serverless](https://www.elastic.co/docs/api/doc/serverless/group/endpoint-data-views-v2)
-- Discover sessions API: [Kibana](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-discover-sessions) or [Serverless](https://www.elastic.co/docs/api/doc/serverless/group/endpoint-discover-sessions)
+- Data views v2 API reference: [Kibana](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-data-views-v2) or [Serverless](https://www.elastic.co/docs/api/doc/serverless/group/endpoint-data-views-v2)
+- Discover sessions API reference: [Kibana](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-discover-sessions) or [Serverless](https://www.elastic.co/docs/api/doc/serverless/group/endpoint-discover-sessions)
 
 To interact with these APIs, use the following HTTP methods:
 
@@ -223,7 +234,7 @@ GET kbn:/api/dashboards
 
 For more information about the console, refer to [Run API requests](https://www.elastic.co/docs/explore-analyze/query-filter/tools/console).
 
-${buildStabilitySection([dashboardsStabilityRow, visualizationsStabilityRow, markdownsStabilityRow, linksStabilityRow, tagsStabilityRow], { plural: true })}
+${buildStabilitySection([dashboardsStabilityRow, visualizationsStabilityRow, markdownsStabilityRow, linksStabilityRow, tagsStabilityRow, dataViewsV2StabilityRow, discoverSessionsStabilityRow], { plural: true })}
 
 ${buildAboutSection({ plural: true, includePreviousSpecs: true })}`;
 
