@@ -213,11 +213,10 @@ Use the Kibana Dashboards, Visualizations, Markdowns, Links, and Tags APIs to pr
 - [Markdowns API reference](markdowns.html)
 - [Links API reference](links.html)
 - [Tags API reference](tags.html)
+- [Data views v2 API reference ↗](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-data-views-v2) ([Serverless ↗](https://www.elastic.co/docs/api/doc/serverless/group/endpoint-data-views-v2))
+- [Discover sessions API reference ↗](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-discover-sessions) ([Serverless ↗](https://www.elastic.co/docs/api/doc/serverless/group/endpoint-discover-sessions))
 
-Two related APIs are documented in the Kibana API reference instead of on this site:
-
-- Data views v2 API reference: [Kibana](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-data-views-v2) or [Serverless](https://www.elastic.co/docs/api/doc/serverless/group/endpoint-data-views-v2)
-- Discover sessions API reference: [Kibana](https://www.elastic.co/docs/api/doc/kibana/group/endpoint-discover-sessions) or [Serverless](https://www.elastic.co/docs/api/doc/serverless/group/endpoint-discover-sessions)
+The ↗ icon marks references that open in the Kibana API docs instead of on this site.
 
 To interact with these APIs, use the following HTTP methods:
 
