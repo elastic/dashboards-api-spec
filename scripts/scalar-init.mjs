@@ -9,7 +9,8 @@ const scalarCustomCss = ` .settingsButton, .sendButton, .agent-scalar,
       .reference-navigation-search, .search-input, .search-button,
       .download-button, .scalar-api-client, .app-exit-button,
       .scalar-mcp-layer-link, a[href="https://www.scalar.com"]
-      { display: none !important; } `;
+      { display: none !important; }
+      .scalar-app .markdown a:visited { color: var(--font-color); } `;
 
 if (!window.Scalar || !apiReferenceContainer || !specUrl) {
   console.error("Scalar failed to load.");
