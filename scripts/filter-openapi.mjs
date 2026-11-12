@@ -53,7 +53,11 @@ function buildStabilitySection(rows, { plural = false, showName = true } = {}) {
       column !== "9.6" ||
       rows.some((row) => status(row["9.6"]) !== status(row["9.5"])),
   );
-  const columns = showName ? ["API", ...columnsShown] : [...columnsShown];
+  // When 9.6 is dropped, the 9.5 column also covers 9.6 and later.
+  const headerLabels = columnsShown.map((column) =>
+    column === "9.5" && !columnsShown.includes("9.6") ? "9.5+" : column,
+  );
+  const columns = showName ? ["API", ...headerLabels] : [...headerLabels];
   // Show an en dash (not the banned em dash) when an API is not available.
   const formatCell = (cell) => (cell === "" ? "–" : cell);
   const rowToCells = (row) => [
