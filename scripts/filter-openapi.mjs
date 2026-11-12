@@ -45,12 +45,20 @@ const stabilityColumns = ["9.4", "9.5", "9.6", "Serverless"];
 // included on the introduction (multiple rows) and dropped on single-API pages.
 // Only footnotes whose marker appears in a cell are rendered.
 function buildStabilitySection(rows, { plural = false, showName = true } = {}) {
-  const columns = showName ? ["API", ...stabilityColumns] : [...stabilityColumns];
+  // Drop the 9.6 column when every row has the same status as in 9.5, ignoring
+  // footnote markers. The 9.6 column only appears when it adds information.
+  const status = (cell) => (cell ?? "").replace(/\s*[¹²]/g, "").trim();
+  const columnsShown = stabilityColumns.filter(
+    (column) =>
+      column !== "9.6" ||
+      rows.some((row) => status(row["9.6"]) !== status(row["9.5"])),
+  );
+  const columns = showName ? ["API", ...columnsShown] : [...columnsShown];
   // Show an en dash (not the banned em dash) when an API is not available.
   const formatCell = (cell) => (cell === "" ? "–" : cell);
   const rowToCells = (row) => [
     ...(showName ? [row.name] : []),
-    ...stabilityColumns.map((column) => row[column] ?? ""),
+    ...columnsShown.map((column) => row[column] ?? ""),
   ];
 
   const header = `| ${columns.join(" | ")} |\n| ${columns
