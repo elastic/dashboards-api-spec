@@ -9,50 +9,52 @@ function resolveRepoUrl(relativePath) {
   return new URL(`../${relativePath}`, import.meta.url);
 }
 
+const docsApiBaseUrl = "https://www.elastic.co/docs/api/doc/kibana/group/";
+const dashboardsTargetUrl = `${docsApiBaseUrl}endpoint-dashboards`;
+
+// Each old page becomes a redirect stub that points to its new home in the
+// Elastic documentation. The spec files are still copied to dist so that
+// existing consumers can keep fetching them.
 const generatedDocDefinitions = [
   {
     distFileName: "index.html",
     specFileName: "introduction-openapi.yaml",
-    title: "Kibana Dashboards, Visualizations, Markdowns, Links, and Tags APIs",
+    label: "Dashboards API reference",
+    targetUrl: dashboardsTargetUrl,
   },
   {
     distFileName: "dashboards.html",
     specFileName: "dashboards-openapi.yaml",
-    title: "Dashboards API Reference",
+    label: "Dashboards API reference",
+    targetUrl: dashboardsTargetUrl,
   },
   {
     distFileName: "visualizations.html",
     specFileName: "visualizations-openapi.yaml",
-    title: "Visualizations API Reference",
+    label: "Visualizations API reference",
+    targetUrl: `${docsApiBaseUrl}endpoint-visualizations`,
   },
   {
     distFileName: "markdowns.html",
     specFileName: "markdowns-openapi.yaml",
-    title: "Markdowns API Reference",
+    label: "Markdowns API reference",
+    targetUrl: `${docsApiBaseUrl}endpoint-markdowns`,
   },
   {
     distFileName: "links.html",
     specFileName: "links-openapi.yaml",
-    title: "Links API Reference",
+    label: "Links API reference",
+    targetUrl: `${docsApiBaseUrl}endpoint-links`,
   },
   {
     distFileName: "tags.html",
     specFileName: "tags-openapi.yaml",
-    title: "Tags API Reference",
+    label: "Tags API reference",
+    targetUrl: `${docsApiBaseUrl}endpoint-tags`,
   },
 ];
 const distAssetDefinitions = [
   { sourcePath: "assets/favicon.ico", distFileName: "favicon.ico" },
-  { sourcePath: "assets/elastic-logo.png", distFileName: "elastic-logo.png" },
-  {
-    sourcePath: "assets/inter-variable.woff2",
-    distFileName: "inter-variable.woff2",
-  },
-  {
-    sourcePath: "scripts/scalar-api-reference.js",
-    distFileName: "scalar-api-reference.js",
-  },
-  { sourcePath: "scripts/scalar-init.mjs", distFileName: "scalar-init.mjs" },
 ];
 
 const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
@@ -92,16 +94,16 @@ async function filterSpec() {
 }
 
 async function buildHTML() {
-  console.log("Building the reference HTML docs...");
+  console.log("Building the redirect pages...");
   const template = await readFile(
-    resolveRepoUrl("scripts/template.html"),
+    resolveRepoUrl("scripts/redirect-template.html"),
     "utf8",
   );
 
   for (const docDefinition of generatedDocDefinitions) {
     const html = template
-      .replaceAll("__PAGE_TITLE__", docDefinition.title)
-      .replace("__API_SPEC_URL__", docDefinition.specFileName);
+      .replaceAll("__PAGE_LABEL__", docDefinition.label)
+      .replaceAll("__TARGET_URL__", docDefinition.targetUrl);
 
     await writeFile(resolveRepoUrl(`dist/${docDefinition.distFileName}`), html);
   }
