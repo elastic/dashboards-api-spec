@@ -1,6 +1,6 @@
 # Kibana API Docs
 
-Static API docs site that builds an introduction page plus separate dashboards, visualizations, markdowns, links, and tags references.
+The Dashboards, Visualizations, Markdowns, Links, and Tags API references now live in the [Kibana API documentation](https://www.elastic.co/docs/api/doc/kibana/). This repository builds the filtered OpenAPI specs and publishes them, together with redirect pages for the old reference URLs, to GitHub Pages.
 
 ## Development
 
@@ -12,14 +12,10 @@ npm run dev
 
 Open http://localhost:3000 to view the site.
 
-- Introduction: `http://localhost:3000/`
-- Dashboards reference: `http://localhost:3000/dashboards.html`
-- Visualizations reference: `http://localhost:3000/visualizations.html`
-- Markdowns reference: `http://localhost:3000/markdowns.html`
-- Links reference: `http://localhost:3000/links.html`
-- Tags reference: `http://localhost:3000/tags.html`
+- Redirect pages: `http://localhost:3000/index.html`, `dashboards.html`, `visualizations.html`, `markdowns.html`, `links.html`, and `tags.html`
+- Filtered specs: `http://localhost:3000/dashboards-openapi.yaml` and the other `*-openapi.yaml` files
 
-This does an initial build, serves the generated output from `dist/`, and watches the site inputs for changes. When you edit the OpenAPI spec, the filter script, or the html template, the site is rebuilt automatically. Refresh the browser to pick up the new output.
+This does an initial build, serves the generated output from `dist/`, and watches the site inputs for changes. When you edit the OpenAPI spec or the filter script, the site is rebuilt automatically. Refresh the browser to pick up the new output.
 
 ## Build pipeline
 
@@ -31,15 +27,9 @@ This does an initial build, serves the generated output from `dist/`, and watche
 - `generated/markdowns-openapi.yaml` is the filtered markdowns spec generated during build.
 - `generated/links-openapi.yaml` is the filtered links spec generated during build.
 - `generated/tags-openapi.yaml` is the filtered tags spec generated during build.
-- `dist/index.html` is the generated introduction page shell.
-- `dist/dashboards.html` is the generated dashboards reference page shell.
-- `dist/visualizations.html` is the generated visualizations reference page shell.
-- `dist/markdowns.html` is the generated markdowns reference page shell.
-- `dist/links.html` is the generated links reference page shell.
-- `dist/tags.html` is the generated tags reference page shell.
-- `dist/introduction-openapi.yaml`, `dist/dashboards-openapi.yaml`, `dist/visualizations-openapi.yaml`, `dist/markdowns-openapi.yaml`, `dist/links-openapi.yaml`, and `dist/tags-openapi.yaml` are the copied filtered specs loaded by the browser at runtime.
-- `dist/scalar-api-reference.js` is the vendored Scalar browser bundle copied from `assets/scalar-api-reference.js`.
-- `scripts/template.html` defines the shared page shell and the client-side Scalar bootstrap for all four pages.
+- `dist/*.html` are redirect pages, one for each old reference page. Each page sends the reader to the matching group in the Kibana API documentation. The pages that map to a group are `dashboards.html`, `visualizations.html`, `markdowns.html`, `links.html`, and `tags.html`. `index.html` points to the Dashboards group.
+- `dist/introduction-openapi.yaml`, `dist/dashboards-openapi.yaml`, `dist/visualizations-openapi.yaml`, `dist/markdowns-openapi.yaml`, `dist/links-openapi.yaml`, and `dist/tags-openapi.yaml` are the copied filtered specs. They stay available so that tools that fetch them keep working.
+- `scripts/redirect-template.html` defines the shared redirect page. `scripts/build-dist.mjs` holds the target URL for each page.
 
 To produce the static site bundle:
 
