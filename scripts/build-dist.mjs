@@ -19,37 +19,37 @@ const generatedDocDefinitions = [
   {
     distFileName: "index.html",
     specFileName: "introduction-openapi.yaml",
-    label: "Dashboards API reference",
+    label: "Kibana Dashboards API reference",
     targetUrl: dashboardsTargetUrl,
   },
   {
     distFileName: "dashboards.html",
     specFileName: "dashboards-openapi.yaml",
-    label: "Dashboards API reference",
+    label: "Kibana Dashboards API reference",
     targetUrl: dashboardsTargetUrl,
   },
   {
     distFileName: "visualizations.html",
     specFileName: "visualizations-openapi.yaml",
-    label: "Visualizations API reference",
+    label: "Kibana Visualizations API reference",
     targetUrl: `${docsApiBaseUrl}endpoint-visualizations`,
   },
   {
     distFileName: "markdowns.html",
     specFileName: "markdowns-openapi.yaml",
-    label: "Markdowns API reference",
+    label: "Kibana Markdowns API reference",
     targetUrl: `${docsApiBaseUrl}endpoint-markdowns`,
   },
   {
     distFileName: "links.html",
     specFileName: "links-openapi.yaml",
-    label: "Links API reference",
+    label: "Kibana Links API reference",
     targetUrl: `${docsApiBaseUrl}endpoint-links`,
   },
   {
     distFileName: "tags.html",
     specFileName: "tags-openapi.yaml",
-    label: "Tags API reference",
+    label: "Kibana Tags API reference",
     targetUrl: `${docsApiBaseUrl}endpoint-tags`,
   },
 ];
