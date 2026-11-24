@@ -1,6 +1,10 @@
 # Kibana API Docs
 
-The Dashboards, Visualizations, Markdowns, Links, and Tags API references now live in the [Kibana API documentation](https://www.elastic.co/docs/api/kibana). This repository builds the filtered OpenAPI specs and publishes them, together with redirect pages for the old reference URLs, to GitHub Pages.
+> **This repository is no longer updated, and it will be archived.** The Dashboards, Visualizations, Markdowns, Links, and Tags API references live in the [Kibana API documentation](https://www.elastic.co/docs/api/kibana). Kibana now publishes the OpenAPI files, so download [`kibana.yaml`](https://raw.githubusercontent.com/elastic/kibana/main/oas_docs/output/kibana.yaml) or [`kibana.serverless.yaml`](https://raw.githubusercontent.com/elastic/kibana/main/oas_docs/output/kibana.serverless.yaml) from the Kibana repository.
+
+The old reference site at `dashboardsapispec.kibana.dev` only redirects to the Kibana API documentation. The filtered `*-openapi.yaml` files it still serves stay at their last published version, so use the Kibana files for the current schema.
+
+Until the repository is archived, it builds those filtered OpenAPI files and the redirect pages, and publishes them to GitHub Pages.
 
 ## Development
 
