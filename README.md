@@ -1,6 +1,6 @@
 # Kibana API Docs
 
-The Dashboards, Visualizations, Markdowns, Links, and Tags API references now live in the [Kibana API documentation](https://www.elastic.co/docs/api/doc/kibana/). This repository builds the filtered OpenAPI specs and publishes them, together with redirect pages for the old reference URLs, to GitHub Pages.
+The Dashboards, Visualizations, Markdowns, Links, and Tags API references now live in the [Kibana API documentation](https://www.elastic.co/docs/api/kibana). This repository builds the filtered OpenAPI specs and publishes them, together with redirect pages for the old reference URLs, to GitHub Pages.
 
 ## Development
 

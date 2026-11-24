@@ -9,7 +9,7 @@ function resolveRepoUrl(relativePath) {
   return new URL(`../${relativePath}`, import.meta.url);
 }
 
-const docsApiBaseUrl = "https://www.elastic.co/docs/api/doc/kibana/group/";
+const docsApiBaseUrl = "https://www.elastic.co/docs/api/kibana/group/";
 const dashboardsTargetUrl = `${docsApiBaseUrl}endpoint-dashboards`;
 
 // Each old page becomes a redirect stub that points to its new home in the
